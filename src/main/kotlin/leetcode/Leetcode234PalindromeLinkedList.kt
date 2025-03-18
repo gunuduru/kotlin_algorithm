@@ -1,6 +1,6 @@
 package main.kotlin.leetcode
 
-import main.kotlin.leetcode.Leetcode234dPalindromeLinkedList.Companion.isPalindrome
+import main.kotlin.leetcode.Leetcode234PalindromeLinkedList.Companion.isPalindrome
 import java.util.*
 
 /**
@@ -12,7 +12,7 @@ import java.util.*
  *     var next: ListNode? = null
  * }
  */
-class Leetcode234dPalindromeLinkedList {
+class Leetcode234PalindromeLinkedList {
     class ListNode(var `val`: Int) {
         var next: ListNode? = null
     }
@@ -38,8 +38,8 @@ class Leetcode234dPalindromeLinkedList {
 }
 
 fun main() {
-    val head = Leetcode234dPalindromeLinkedList.ListNode(1)
-    head.next = Leetcode234dPalindromeLinkedList.ListNode(2)
+    val head = Leetcode234PalindromeLinkedList.ListNode(1)
+    head.next = Leetcode234PalindromeLinkedList.ListNode(2)
 //    head.next = Leetcode234dPalindromeLinkedList.ListNode(2)
 //    head.next = Leetcode234dPalindromeLinkedList.ListNode(1)
     println(isPalindrome(head))
