@@ -2,7 +2,6 @@ package main.kotlin.leetcode
 
 import main.kotlin.leetcode.Leetcode973KClosestPointsToOrigin.Companion.kClosest
 import java.util.*
-import kotlin.math.sqrt
 
 /**
  * Example:
@@ -17,20 +16,17 @@ class Leetcode973KClosestPointsToOrigin {
 
     companion object {
         class Position(val x: Int, val y: Int) {
-            constructor(array: IntArray) : this(array[0], array[1])
+            constructor(array: IntArray) : this(
+                array[0],
+                array[1]
+            ) // array는 size 2인 Int 배열이 반드시 들어온다는 가정 하에 생성자 메소드를 구현하였다. 실제 사용시에는 예외처리 필수
 
-            val distance: Double = sqrt((x * x + y * y).toDouble())
+            val distance = x * x + y * y
             fun toIntArray() = intArrayOf(x, y)
         }
 
         fun kClosest(points: Array<IntArray>, k: Int): Array<IntArray> {
-            val pq = PriorityQueue<Position> { o1, o2 ->
-                when {
-                    o1.distance > o2.distance -> 1
-                    o1.distance == o2.distance -> 0
-                    else -> -1
-                }
-            }
+            val pq = PriorityQueue<Position>(compareBy { position -> position.distance })
 
             points.map { point -> Position(point) }
                 .forEach { position ->
