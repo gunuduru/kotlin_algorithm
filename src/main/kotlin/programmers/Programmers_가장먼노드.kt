@@ -27,11 +27,14 @@ class Programmers_가장먼노드 {
             visited[1] = true
             while (queue.isNotEmpty()) {
                 qCnt = queue.size
-                for (idx in 0 until qCnt) {
+                repeat(qCnt) {
                     val front = queue.poll()
-                    visited[front.num] = true
                     for (node in front.adj) {
-                        if (!visited[node.num]) queue.add(node) // 인접한 노드들 중에서 아직 방문하지 않은 노드들만 queue에 추가한다.
+                        if (!visited[node.num]) {
+                            // 인접한 노드들 중에서 아직 방문하지 않은 노드들만 queue에 추가한다.
+                            visited[node.num] = true // 방문할 예정인 노드들을 미리 방문체크
+                            queue.add(node)
+                        }
                     }
                 }
                 curDistance++
