@@ -5,42 +5,33 @@ import java.util.*
 
 class Programmers_가장먼노드 {
     companion object {
-        data class Node(val num: Int) {
-            val adj: LinkedList<Node> = LinkedList()
-        }
-
         fun solution(n: Int, edge: Array<IntArray>): Int {
-            val nodes = (0..n).map { num -> Node(num) } // nodes[0]은 사용하지 않는다.
+            val graph = Array(n + 1) { mutableListOf<Int>() }
+            val visited = BooleanArray(n + 1)
+            val distance = IntArray(n + 1)
 
-            // 인접노드 설정
-            for (arr in edge) {
-                nodes[arr[0]].adj.add(nodes[arr[1]])
-                nodes[arr[1]].adj.add(nodes[arr[0]])
+            for ((u, v) in edge) {
+                graph[u].add(v)
+                graph[v].add(u)
             }
 
-            val visited = BooleanArray(n + 1)
-            val queue: Deque<Node> = LinkedList()
-            var curDistance = 0
-            var qCnt = 0
-
-            queue.add(nodes[1])
+            val queue: Deque<Int> = LinkedList()
+            queue.add(1)
             visited[1] = true
+
             while (queue.isNotEmpty()) {
-                qCnt = queue.size
-                repeat(qCnt) {
-                    val front = queue.poll()
-                    for (node in front.adj) {
-                        if (!visited[node.num]) {
-                            // 인접한 노드들 중에서 아직 방문하지 않은 노드들만 queue에 추가한다.
-                            visited[node.num] = true // 방문할 예정인 노드들을 미리 방문체크
-                            queue.add(node)
-                        }
+                val curr = queue.poll()
+                for (next in graph[curr]) {
+                    if (!visited[next]) {
+                        visited[next] = true
+                        distance[next] = distance[curr] + 1
+                        queue.add(next)
                     }
                 }
-                curDistance++
             }
 
-            return qCnt
+            val max = distance.maxOrNull() ?: 0
+            return distance.count { it == max }
         }
     }
 }
