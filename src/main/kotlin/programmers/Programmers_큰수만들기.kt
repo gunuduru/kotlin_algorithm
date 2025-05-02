@@ -5,32 +5,28 @@ import java.util.*
 
 class Programmers_큰수만들기 {
     companion object {
-        class NumIdx(val num: Char, val idx: Int)
-
         fun solution(number: String, k: Int): String {
-            // 가장 작은 숫자이고, 가장 앞에 있는 숫자들을 삭제하면 되겠다.
-            val pq = PriorityQueue<NumIdx> { o1, o2 ->
-                if (o1.num == o2.num) o1.idx - o2.idx
-                else o1.num - o2.num
+            // 맨 앞에서부터 큰 숫자를 남기게끔 그리디하게 접근
+            var removeCnt = 0
+            val stk: Deque<Char> = LinkedList()
+
+            for (c in number) {
+                // c보다 작은 숫자가 앞에 있었다면 삭제
+                while (stk.isNotEmpty() && stk.last < c && removeCnt < k) {
+                    stk.removeLast()
+                    removeCnt++
+                }
+                stk.add(c)
             }
 
-            number.forEachIndexed { idx, num ->
-                pq.add(NumIdx(num, idx))
+            // k개만큼 삭제하지 않았다면, 맨 뒤의 숫자들을 삭제 (현재 stk은 맨 뒤의 숫자가 가장 작을 것이므로)
+            if (removeCnt < k) {
+                repeat(k - removeCnt) {
+                    stk.removeLast()
+                }
             }
 
-            repeat(k) {
-                pq.remove() // poll?
-            }
-
-            val pqWithIdx = PriorityQueue<NumIdx> { o1, o2 ->
-                o1.idx - o2.idx
-            }
-
-            while (pq.isNotEmpty()) {
-                pqWithIdx.add(pq.poll())
-            }
-
-            return pqWithIdx.map { it.num }.joinToString("")
+            return stk.joinToString("")
         }
     }
 }
