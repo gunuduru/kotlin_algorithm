@@ -34,6 +34,16 @@ class Programmers_베스트앨범 {
 
             return result.toIntArray()
         }
+
+        fun solution2(genres: Array<String>, plays: IntArray): IntArray {
+            return genres.indices                       // [0, 1, 2, ...]
+                .groupBy { genres[it] }                // Map<String, List<Int>> → 장르별 인덱스 그룹화
+                .toList()                              // List<Pair<String, List<Int>>> → 정렬을 위해 List로 변환
+                .sortedByDescending { it.second.sumOf { plays[it] } } // 재생 수 총합 기준 정렬
+                .map { it.second.sortedByDescending { plays[it] }.take(2) } // 장르별 상위 2개 추출
+                .flatten()                             // 2차원 리스트 → 1차원으로 평탄화
+                .toIntArray()                          // 배열로 변환
+        }
     }
 }
 
