@@ -5,42 +5,44 @@ import java.util.*
 
 class Programmers_모음사전 {
     companion object {
-        // A, AA, AAA, AAAA, (AAAAA~AUUUU), (~AUUUU), (~AUUU), (~AUU), (~AU), ~U
         fun solution(word: String): Int {
+            val vowels = charArrayOf('A', 'E', 'I', 'O', 'U')
             val stk: Deque<Char> = LinkedList()
-            val mapCurrToNext: Map<Char, Char> = mapOf(
-                'A' to 'E',
-                'E' to 'I',
-                'I' to 'O',
-                'O' to 'U'
-            )
+            val sb = StringBuilder()
+            var count = 1
 
-            var cnt = 1 // A부터
-            stk.add('A') // 첫번째 추가
+            stk.add('A')
+            sb.append('A')
 
-            while (stk.isNotEmpty()) {
-                if (stk.joinToString("") == word) break // 찾는 문자열을 발견했다면 반복문 탈출
-                // 삭제작업
+            while (true) {
+                if (sb.toString() == word) break
+
+                // 길이가 5일 때 처리
                 if (stk.size == 5) {
-                    if (stk.last == 'U') {
-                        while (stk.last == 'U') {
-                            stk.removeLast()
-                        } // ~UU로 끝나는 부분을 모두 pop -> 해당 prefix 기반으로 사전 맨 마지막이므로
-                    } else {
-                        val next = mapCurrToNext[stk.last]!!
-                        stk.removeLast() // 가장 마지막 문자를
-                        stk.add(next) // 다음 모음으로 변경
-                        cnt++ // stk.add시점에 개수 추가
-                        continue
+                    // 'U'로 끝나는 경우 → 뒤에서부터 'U' 제거
+                    while (stk.isNotEmpty() && stk.last == 'U') {
+                        stk.removeLast()
+                        sb.deleteCharAt(sb.length - 1)
                     }
+
+                    // 그 다음 모음으로 교체
+                    if (stk.isNotEmpty()) {
+                        val lastChar = stk.removeLast()
+                        sb.deleteCharAt(sb.length - 1)
+                        val nextIndex = vowels.indexOf(lastChar) + 1
+                        stk.add(vowels[nextIndex])
+                        sb.append(vowels[nextIndex])
+                    }
+                } else {
+                    // 길이 < 5 → 뒤에 'A' 추가
+                    stk.add('A')
+                    sb.append('A')
                 }
 
-                // 추가작업
-                stk.add('A') // 현재 stk.size < 5 이므로, 채워준다.
-                cnt++
+                count++
             }
 
-            return cnt
+            return count
         }
     }
 }
