@@ -10,14 +10,18 @@ class Leetcode77Combinations {
             val result = mutableListOf<List<Int>>()
 
             fun dfs(prevElements: MutableList<Int>, n: Int, k: Int) {
-                if (prevElements.size == k) {
-                    result.add(prevElements.toList())
+                if (prevElements.size == k) { // prevElements가 k개 쌓였다 -> 조합 한개 완성
+                    result.add(prevElements.toList()) // result에 반영
                 } else {
+                    /**
+                     * 조합 결과를 찾기 위한 dfs 범위의 최소값.
+                     * 선택한 숫자가 없다면 1, 있다면 이전에 선택한 숫자의 다음 숫자
+                     */
                     val nextStartNum = if(prevElements.isEmpty()) 1 else prevElements.last() + 1
-                    (nextStartNum..n).forEach { nextElement ->
-                        prevElements.add(nextElement)
-                        dfs(prevElements, n, k)
-                        prevElements.removeAt(prevElements.lastIndex)
+                    (nextStartNum..n).forEach { nextElement -> // 다음 숫자 최소값 ~ n 사이에서 dfs 수행
+                        prevElements.add(nextElement) // nextElement를 추가하여
+                        dfs(prevElements, n, k) // dfs 수행
+                        prevElements.removeAt(prevElements.lastIndex) // 다음 nextElement에서의 dfs를 위해, 이번 블록에서 추가한 값은 제거한다. (visited 처리하듯)
                     }
                 }
             }
